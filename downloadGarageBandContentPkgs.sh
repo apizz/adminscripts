@@ -1,4 +1,5 @@
 #!/bin/bash
+# Downloads GarageBand content for deployment
 # .pkgs to download: https://jamfnation.jamfsoftware.com/discussion.html?id=14594#responseChild93147
 content2015=('MAContent10_GarageBandCoreContent_v3.pkg'
 'MAContent10_PremiumPreLoopsChillwave.pkg'
