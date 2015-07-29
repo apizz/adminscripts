@@ -66,3 +66,51 @@ do
 		#installer -pkg "$downloadFolder"/"${legacyContent[$i]}" -target /
 	fi
 done
+
+# https://groups.google.com/d/msg/macenterprise/GMGONqr17CM/wQZs6wLAa0AJ
+lessons=('2Z695-0098_Rock%20Guitar%201_Power%20Chord%20Punk.pkg'
+'2Z695-0099_Rock%20Guitar%202_Suspended%20Chords%20and%20Arpeggios.pkg'
+'2Z695-0100_Rock%20Guitar%203_Drop%20D%20and%20Heavy%20Riffs.pkg'
+'2Z695-0101_Rock%20Guitar%204_Melodies%20and%20Two%20Note%20Chords.pkg'
+'2Z695-0102_Rock%20Guitar%205_Classic%20Riffs.pkg'
+'2Z695-0050_Guitar%20Lesson%202_Chords%20-%20G,%20C.pkg'
+'2Z695-0051_Guitar%20Lesson%203_Chords%20-%20A,%20D.pkg'
+'2Z695-0052_Guitar%20Lesson%204_Minor%20Chords.pkg'
+'2Z695-0053_Guitar%20Lesson%205_Single%20Note%20Melodies.pkg'
+'2Z695-0054_Guitar%20Lesson%206_Power%20Chords.pkg'
+'2Z695-0055_Guitar%20Lesson%207_Major%20Barre%20Chords.pkg'
+'2Z695-0056_Guitar%20Lesson%208_Minor%20Barre%20Chords.pkg'
+'2Z695-0057_Guitar%20Lesson%209_Blues%20Lead.pkg'
+'2Z695-0091_Blues%20Guitar%201_12%20Bar%20Blues%20in%20A.pkg'
+'2Z695-0092_Blues%20Guitar%202_Minor%20Pentatonic%20Scale.pkg'
+'2Z695-0093_Blues%20Guitar%203_Blues%20Rhythm%20Riffs.pkg'
+'2Z695-0094_Blues%20Guitar%204_12%20Bar%20Blues%20in%20Other%20Keys.pkg'
+'2Z695-0095_Blues%20Guitar%205_Bends%20and%20Vibrato.pkg'
+'2Z695-0096_Blues%20Guitar%206_Hammers,%20Pulls,%20and%20Slides.pkg'
+'2Z695-0097_Blues%20Guitar%207_Blues%20Scale%20and%20Quarter%20Bends.pkg'
+'2Z695-0103_Pop%20Piano%201_Major%20and%20Minor%20Chords.pkg'
+'2Z695-0104_Pop%20Piano%202_Inversions%20and%20Broken%20Chords.pkg'
+'2Z695-0105_Pop%20Piano%203_Suspended%20Chords.pkg'
+'2Z695-0106_Pop%20Piano%204_7th%20Chords.pkg'
+'2Z695-0107_Pop%20Piano%205_Slash%20Chords.pkg'
+'2Z695-0108_Pop%20Piano%206_Melodic%20Embellishment.pkg'
+'2Z695-0109_Classical%20Piano%201_Mozart%20Minuet.pkg'
+'2Z695-0110_Classical%20Piano%202_Bach%20Musette.pkg'
+'2Z695-0111_Classical%20Piano%203_Beethoven%20Fuer%20Elise.pkg'
+'2Z695-0112_Classical%20Piano%204_Chopin%20Prelude.pkg'
+'2Z695-0042_Piano%20Lesson%202_Right%20Hand.pkg'
+'2Z695-0043_Piano%20Lesson%203_Left%20Hand.pkg'
+'2Z695-0044_Piano%20Lesson%204_Rhythm.pkg'
+'2Z695-0045_Piano%20Lesson%205_Sharps%20and%20Flats.pkg'
+'2Z695-0046_Piano%20Lesson%206_Rhythmic%20Accents.pkg'
+'2Z695-0047_Piano%20Lesson%207_Major%20and%20Minor%20Chords.pkg'
+'2Z695-0048_Piano%20Lesson%208_Scales.pkg'
+'2Z695-0049_Piano%20Lesson%209_Playing%20the%20Blues.pkg')
+
+echo "** Downloading lessons..."
+for ((i = 0; i < "${#lessons[@]}"; i++))
+do
+	filename=$(echo "${lessons[$i]}" | cut -d'_' -f2- | tr -d '%20')
+	curl -o "$downloadFolder"/"$filename" http://downloads.apple.com/pub/lessons/basic/"${lessons[$i]}"
+	#installer -pkg "$downloadFolder"/"$filename" -target /
+done
