@@ -44,3 +44,25 @@ do
 	curl -o "$downloadFolder"/"${content2013[$i]}" http://audiocontentdownload.apple.com/lp10_ms3_content_2013/"${content2013[$i]}"
 	#installer -pkg "$downloadFolder"/"${content2013[$i]}" -target /
 done
+
+# https://jamfnation.jamfsoftware.com/discussion.html?id=6464#responseChild40895
+legacyContent=('http://downloads.apple.com/static/gb/gb11bc/GarageBandBasicContent.pkg'
+'http://swcdn.apple.com/content/downloads/43/39/061-5890/y2FxthySsyd2PSt3zfZ4mz3XkbqdGZPDZc/GarageBandExtraContent.tar'
+'http://audiocontentdownload.apple.com/lp9_ms2_content_2011/MGBContentCompatibility.pkg')
+
+echo "** Downloading legacy content..."
+for ((i = 0; i < "${#legacyContent[@]}"; i++))
+do
+	filename=$(echo "${legacyContent[$i]}" | awk -F'/' '{print $NF}')
+	if [[ "$filename" = "GarageBandExtraContent.tar" ]];then
+		curl -o "$downloadFolder"/"$filename" "${legacyContent[$i]}"
+		# Unarchive to get the .pkg
+		tar -xf "$downloadFolder"/"$filename" -C /tmp
+		filenamePkg=$(echo "$filename" | cut -d'.' -f-1)
+		tar -xf "$downloadFolder"/"$filenamePkg".pkg.tar -C /tmp
+		#installer -pkg "$downloadFolder"/"$filenamePkg".pkg -target /
+	else
+		curl -o "$downloadFolder"/"$filename" "${legacyContent[$i]}"
+		#installer -pkg "$downloadFolder"/"${legacyContent[$i]}" -target /
+	fi
+done
