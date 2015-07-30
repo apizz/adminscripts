@@ -27,6 +27,7 @@ content2015=('MAContent10_GarageBandCoreContent_v3.pkg'
 echo "** Downloading 2015 content..."
 for ((i = 0; i < "${#content2015[@]}"; i++))
 do
+	echo "Downloading ${content2015[$i]}..."
 	curl -o "$downloadFolder"/"${content2015[$i]}" http://audiocontentdownload.apple.com/lp10_ms3_content_2015/"${content2015[$i]}"
 	#installer -pkg "$downloadFolder"/"${content2015[$i]}" -target /
 done
@@ -41,6 +42,7 @@ content2013=('MAContent10_GarageBandPremiumContent.pkg'
 echo "** Downloading 2013 content..."
 for ((i = 0; i < "${#content2013[@]}"; i++))
 do
+	echo "Downloading ${content2013[$i]}..."
 	curl -o "$downloadFolder"/"${content2013[$i]}" http://audiocontentdownload.apple.com/lp10_ms3_content_2013/"${content2013[$i]}"
 	#installer -pkg "$downloadFolder"/"${content2013[$i]}" -target /
 done
@@ -55,6 +57,7 @@ for ((i = 0; i < "${#legacyContent[@]}"; i++))
 do
 	filename=$(echo "${legacyContent[$i]}" | awk -F'/' '{print $NF}')
 	if [[ "$filename" = "GarageBandExtraContent.tar" ]];then
+		echo "Downloading $filename..."
 		curl -o "$downloadFolder"/"$filename" "${legacyContent[$i]}"
 		# Unarchive to get the .pkg
 		tar -xf "$downloadFolder"/"$filename" -C /tmp
@@ -62,6 +65,7 @@ do
 		tar -xf "$downloadFolder"/"$filenamePkg".pkg.tar -C /tmp
 		#installer -pkg "$downloadFolder"/"$filenamePkg".pkg -target /
 	else
+		echo "Downloading $filename..."
 		curl -o "$downloadFolder"/"$filename" "${legacyContent[$i]}"
 		#installer -pkg "$downloadFolder"/"${legacyContent[$i]}" -target /
 	fi
@@ -111,6 +115,7 @@ echo "** Downloading lessons..."
 for ((i = 0; i < "${#lessons[@]}"; i++))
 do
 	filename=$(echo "${lessons[$i]}" | cut -d'_' -f2- | tr -d '%20')
+	echo "Downloading $filename..."
 	curl -o "$downloadFolder"/"$filename" http://downloads.apple.com/pub/lessons/basic/"${lessons[$i]}"
 	#installer -pkg "$downloadFolder"/"$filename" -target /
 done
@@ -168,6 +173,7 @@ echo "** Downloading Logic content..."
 for ((i = 0; i < "${#logicContent[@]}"; i++))
 do
 	filename=$(echo "${logicContent[$i]}" | cut -d'_' -f2-)
-	curl -o "$downloadFolder"/"$filename" http://downloads.apple.com/pub/lessons/basic/"${logicContent[$i]}"
+	echo "Downloading $filename..."
+	curl -o "$downloadFolder"/"$filename" http://audiocontentdownload.apple.com/lp10_ms3_content_2013/"${logicContent[$i]}"
 	#installer -pkg "$downloadFolder"/"$filename" -target /
 done
