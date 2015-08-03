@@ -21,7 +21,9 @@ content2015=('MAContent10_GarageBandCoreContent_v3.pkg'
 'MAContent10_PremiumPreLoopsTechHouse.pkg'
 'MAContent10_PremiumPreLoopsWorld.pkg'
 'MAContent10_GarageBandCoreContent2.pkg'
-'ProAudioCoreContent10.pkg')
+'ProAudioCoreContent10.pkg'
+'MAContent10_IRsStereo.pkg'
+'MAContent10_ElectronicDrumKits')
 
 # Loop through each one and download it to the downloads folder, then optionally, (uncomment) install it
 echo "** Downloading 2015 content..."
