@@ -1,6 +1,7 @@
 #!/bin/bash
 # Jacob Salmela
 # Bash version of https://github.com/erikng/adminscripts/blob/master/download-gb-content.py
+# Also downloads GarageBand Lessons and Logic Pro content
 downloadFolder=/tmp
 
 # Put all the package names into an array
@@ -23,7 +24,7 @@ content2015=('MAContent10_GarageBandCoreContent_v3.pkg'
 'MAContent10_GarageBandCoreContent2.pkg'
 'ProAudioCoreContent10.pkg'
 'MAContent10_IRsStereo.pkg'
-'MAContent10_ElectronicDrumKits')
+'MAContent10_ElectronicDrumKits.pkg')
 
 # Loop through each one and download it to the downloads folder, then optionally, (uncomment) install it
 echo "** Downloading 2015 content..."
@@ -190,8 +191,7 @@ logicContent=('MAContent10_AppleLoopsChillwave.pkg'
 echo "** Downloading Logic content..."
 for ((i = 0; i < "${#logicContent[@]}"; i++))
 do
-	filename=$(echo "${logicContent[$i]}" | cut -d'_' -f2-)
-	echo "Downloading $filename..."
-	curl -o "$downloadFolder"/"$filename" http://audiocontentdownload.apple.com/lp10_ms3_content_2013/"${logicContent[$i]}"
-	#installer -pkg "$downloadFolder"/"$filename" -target /
+	echo "Downloading ${logicContent[$i]}..."
+	curl -o "$downloadFolder"/"${logicContent[$i]}" http://audiocontentdownload.apple.com/lp10_ms3_content_2013/"${logicContent[$i]}"
+	#installer -pkg "$downloadFolder"/"${logicContent[$i]}" -target /
 done
