@@ -24,7 +24,9 @@ content2015=('MAContent10_GarageBandCoreContent_v3.pkg'
 'MAContent10_GarageBandCoreContent2.pkg'
 'ProAudioCoreContent10.pkg'
 'MAContent10_IRsStereo.pkg'
-'MAContent10_ElectronicDrumKits.pkg')
+'MAContent10_ElectronicDrumKits.pkg'
+'MAContent10_InstrumentsCinematic.pkg'
+'MAContent10_InstrumentsMellotron.pkg')
 
 # Loop through each one and download it to the downloads folder, then optionally, (uncomment) install it
 echo "** Downloading 2015 content..."
@@ -141,10 +143,8 @@ logicContent=('MAContent10_AppleLoopsChillwave.pkg'
 'MAContent10_IRsStereo.pkg'
 'MAContent10_IRsSurround.pkg'
 'MAContent10_InstrumentsBass.pkg'
-'MAContent10_InstrumentsCinematic.pkg'
 'MAContent10_InstrumentsGuitar.pkg'
 'MAContent10_InstrumentsMallet.pkg'
-'MAContent10_InstrumentsMellotron.pkg'
 'MAContent10_InstrumentsOrchestralBrass.pkg'
 'MAContent10_InstrumentsOrchestralChoir.pkg'
 'MAContent10_InstrumentsOrchestralHarp.pkg'
