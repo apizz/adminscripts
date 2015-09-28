@@ -9,6 +9,8 @@ else
 	else
 		# Check the Info.plist for the icon's name
 		iconFile=$(defaults read "$1"/Contents/Info.plist CFBundleIconFile 2>/dev/null)
+		appName=$(basename "$1")
+		pngFilename="${appName%.*}"
 		# If there is no icon, there is nothing to do
 		if [[ -z "$iconFile" ]];then
 			:
@@ -21,8 +23,8 @@ else
 				echo "* Converting $iconFile.$fileExtension to a PNG..."
 				sips -s format png "$1"/Contents/Resources/"$iconFile.$fileExtension" --out ~/Desktop/"$iconFile".png
 			else
-				# Nothing else to do 
-				:
+				echo "* Converting $iconFile.$fileExtension to a PNG..."
+				sips -s format png "$1"/Contents/Resources/"$iconFile" --out ~/Desktop/"$pngFilename".png
 			fi
 		fi
 	fi
