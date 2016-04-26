@@ -422,7 +422,7 @@ for ((i = 0; i < "${#content2016[@]}"; i++))
 do
 	echo "Downloading ${content2016[$i]}..."
 	curl -o "$downloadFolder"/"${content2016[$i]}" http://audiocontentdownload.apple.com/lp10_ms3_content_2016/"${content2016[$i]}"
-	#installer -pkg "$downloadFolder"/"${content2013[$i]}" -target /
+	#installer -pkg "$downloadFolder"/"${content2016[$i]}" -target /
 done
 
 # https://jamfnation.jamfsoftware.com/discussion.html?id=6464#responseChild40895
