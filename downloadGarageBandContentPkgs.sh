@@ -438,9 +438,11 @@ do
 		echo "Downloading $filename..."
 		curl -o "$downloadFolder"/"$filename" "${legacyContent[$i]}"
 		# Unarchive to get the .pkg
-		tar -xf "$downloadFolder"/"$filename" -C /tmp
+		tar -xf "$downloadFolder"/"$filename" -C "$downloadFolder"
 		filenamePkg=$(echo "$filename" | cut -d'.' -f-1)
-		tar -xf "$downloadFolder"/"$filenamePkg".pkg.tar -C /tmp
+		tar -xf "$downloadFolder"/"$filenamePkg".pkg.tar -C "$downloadFolder"
+		# rm -rf "$downloadFolder"/"$filenamePkg".pkg.tar
+		# rm -rf "$downloadFolder"/"$filenamePkg".tar
 		#installer -pkg "$downloadFolder"/"$filenamePkg".pkg -target /
 	else
 		echo "Downloading $filename..."
