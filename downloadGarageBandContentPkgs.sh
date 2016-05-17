@@ -425,6 +425,26 @@ do
 	#installer -pkg "$downloadFolder"/"${content2016[$i]}" -target /
 done
 
+# Content from 10.1.2 (Chinese insruments)
+content2016garageband1012=('MAContent10_AssetPack_0601_AppleLoopsChineseTraditional.pkg'
+'MAContent10_AssetPack_0601_AppleLoopsChineseTraditional.pkg.resumeDataMA'
+'MAContent10_AssetPack_0602_EXS_WorldChineseKit.pkg'
+'MAContent10_AssetPack_0602_EXS_WorldChineseKit.pkg.resumeDataMA'
+'MAContent10_AssetPack_0603_EXS_WorldErhu.pkg'
+'MAContent10_AssetPack_0603_EXS_WorldErhu.pkg.resumeDataMA'
+'MAContent10_AssetPack_0604_EXS_WorldPipa.pkg'
+'MAContent10_AssetPack_0604_EXS_WorldPipa.pkg.resumeDataMA'
+'MAContent10_AssetPack_0605_EXS_ClassicalGrand.pkg'
+'MAContent10_AssetPack_0605_EXS_ClassicalGrand.pkg.resumeDataMA')
+
+echo "** Downloading 2016 content..."
+for ((i = 0; i < "${#content2016garageband1012[@]}"; i++))
+do
+	echo "Downloading ${content2016garageband1012[$i]}..."
+	curl -o "$downloadFolder"/"${content2016garageband1012[$i]}" http://audiocontentdownload.apple.com/lp10_ms3_content_2016/"${content2016garageband1012[$i]}"
+	#installer -pkg "$downloadFolder"/"${content2016garageband1012[$i]}" -target /
+done
+
 # https://jamfnation.jamfsoftware.com/discussion.html?id=6464#responseChild40895
 legacyContent=('http://downloads.apple.com/static/gb/gb11bc/GarageBandBasicContent.pkg'
 'http://swcdn.apple.com/content/downloads/43/39/061-5890/y2FxthySsyd2PSt3zfZ4mz3XkbqdGZPDZc/GarageBandExtraContent.tar'
