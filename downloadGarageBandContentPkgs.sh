@@ -2,6 +2,10 @@
 # Jacob Salmela
 # Bash version of https://github.com/erikng/adminscripts/blob/master/download-gb-content.py
 # Also downloads GarageBand Lessons and Logic Pro content
+#
+# 7/16 - Add log file and error checking. Downloaded loops are not deleted from download 
+# folder unless they fail to install.
+#
 downloadFolder="/Users/Shared"
 log="/path/to/GB/downloadinstall.log"
 writelog() {
