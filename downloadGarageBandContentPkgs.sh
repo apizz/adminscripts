@@ -2,7 +2,7 @@
 # Jacob Salmela
 # Bash version of https://github.com/erikng/adminscripts/blob/master/download-gb-content.py
 # Also downloads GarageBand Lessons and Logic Pro content
-downloadFolder=/tmp
+downloadFolder="/Users/Shared"
 
 # Put all the package names into an array
 # https://jamfnation.jamfsoftware.com/discussion.html?id=14594#responseChild93147
