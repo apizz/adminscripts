@@ -3,6 +3,27 @@
 # Bash version of https://github.com/erikng/adminscripts/blob/master/download-gb-content.py
 # Also downloads GarageBand Lessons and Logic Pro content
 downloadFolder="/Users/Shared"
+log="/path/to/GB/downloadinstall.log"
+writelog() {
+	if [ $? = 0 ]; then
+		/bin/echo $(date) "${1}" >> $log
+	else
+		/bin/echo $(date) "${2}" >> $log
+	fi
+}
+
+# Creates log if it doesn't exist
+if [ ! -f $log ]; then
+	/usr/bin/touch $log
+	writelog "Garageband Loops Log: Creation Successful." "Garageband Loops Log: Creation Failed."
+	/usr/sbin/chown root:wheel $log
+	/bin/chmod 644 $log
+	writelog "Garageband Loops Log Permissions: Successful." "Garageband Loops Log Permissions: Failed."
+	/bin/echo "----------- Begin Garageband Loops Download & Install Script -----------" >> $log
+else
+	/bin/echo "Garageband Loops Log Exists. Beginning Loop Download & Install Script." >> $log
+	/bin/echo "----------- Begin Garageband Loops Download & Install Script -----------" >> $log
+fi
 
 # Put all the package names into an array
 # https://jamfnation.jamfsoftware.com/discussion.html?id=14594#responseChild93147
@@ -325,12 +346,21 @@ content2015=('MAContent10_GarageBandCoreContent_v3.pkg'
 'MAContent10_AssetPack_0307_AlchemyBasicAdd.pkg')
 
 # Loop through each one and download it to the downloads folder, then optionally, (uncomment) install it
-echo "** Downloading 2015 content..."
+writelog "START: Downloading 2015 content..."
 for ((i = 0; i < "${#content2015[@]}"; i++))
 do
-	echo "Downloading ${content2015[$i]}..."
+	writelog "Downloading ${content2015[$i]}..."
 	curl -o "$downloadFolder"/"${content2015[$i]}" http://audiocontentdownload.apple.com/lp10_ms3_content_2015/"${content2015[$i]}"
-	#installer -pkg "$downloadFolder"/"${content2015[$i]}" -target /
+	writelog "${content2015[$i]} Download: Successful." "${content2015[$i]} Download: Failed."
+	installer -pkg "$downloadFolder"/"${content2015[$i]}" -target /
+	if [ $? = 0 ]; then
+		/bin/echo "$(date) ${content2015[$i]} Install: Successful." >> "$log"
+		/bin/rm -rf "$downloadFolder"/"${content2015[$i]}"
+		writelog "${content2015[$i]} Deletion: Successful." "${content2015[$i]} Deletion: Failed."
+	else
+		/bin/echo "$(date) ${content2015[$i]} Install: Failed." >> "$log"
+		/bin/echo "$(date) ${content2015[$i]} available for examination in ${downloadFolder}." >> "$log"
+	fi
 done
 
 # https://www.afp548.com/2012/08/07/garageband-deployment-quick-tip/
@@ -340,12 +370,21 @@ content2013=('MAContent10_GarageBandPremiumContent.pkg'
 'MAContent10_GB_StereoDrumKitsRnB.pkg'
 'MAContent10_GB_StereoDrumKitsSongWriter.pkg')
 
-echo "** Downloading 2013 content..."
+writelog "Beginning to download 2013 content..."
 for ((i = 0; i < "${#content2013[@]}"; i++))
 do
-	echo "Downloading ${content2013[$i]}..."
+	writelog "Downloading ${content2013[$i]}..."
 	curl -o "$downloadFolder"/"${content2013[$i]}" http://audiocontentdownload.apple.com/lp10_ms3_content_2013/"${content2013[$i]}"
-	#installer -pkg "$downloadFolder"/"${content2013[$i]}" -target /
+	writelog "${content2013[$i]} Download: Successful." "${content2013[$i]} Download: Failed."
+	installer -pkg "$downloadFolder"/"${content2013[$i]}" -target /
+	if [ $? = 0 ]; then
+		/bin/echo "$(date) ${content2013[$i]} Install: Successful." >> "$log"
+		/bin/rm -rf "$downloadFolder"/"${content2013[$i]}"
+		writelog "${content2013[$i]} Deletion: Successful." "${content2013[$i]} Deletion: Failed."
+	else
+		/bin/echo "$(date) ${content2013[$i]} Install: Failed." >> "$log"
+		/bin/echo "$(date) ${content2013[$i]} available for examination in ${downloadFolder}." >> "$log"
+	fi
 done
 
 content2016=('MAContent10_AssetPack_0048_AlchemyPadsDigitalHolyGhost.pkg'
@@ -417,32 +456,45 @@ content2016=('MAContent10_AssetPack_0048_AlchemyPadsDigitalHolyGhost.pkg'
 'MAContent10_AssetPack_0595_DrummerSunsetGBLogic.pkg'
 'MAContent10_AssetPack_0599_GBLogicAlchemyEssentials.pkg')
 
-echo "** Downloading 2016 content..."
+writelog "Beginning to download 2016 content..."
 for ((i = 0; i < "${#content2016[@]}"; i++))
 do
-	echo "Downloading ${content2016[$i]}..."
+	writelog "Downloading ${content2016[$i]}..."
 	curl -o "$downloadFolder"/"${content2016[$i]}" http://audiocontentdownload.apple.com/lp10_ms3_content_2016/"${content2016[$i]}"
-	#installer -pkg "$downloadFolder"/"${content2016[$i]}" -target /
+	writelog "${content2016[$i]} Download: Successful." "${content2016[$i]} Download: Failed."
+	installer -pkg "$downloadFolder"/"${content2016[$i]}" -target /
+	if [ $? = 0 ]; then
+		/bin/echo "$(date) ${content2016[$i]} Install: Successful." >> "$log"
+		/bin/rm -rf "$downloadFolder"/"${content2016[$i]}"
+		writelog "${content2016[$i]} Deletion: Successful." "${content2016[$i]} Deletion: Failed."
+	else
+		/bin/echo "$(date) ${content2016[$i]} Install: Failed." >> "$log"
+		/bin/echo "$(date) ${content2016[$i]} available for examination in ${downloadFolder}." >> "$log"
+	fi
 done
 
 # Content from 10.1.2 (Chinese insruments)
 content2016garageband1012=('MAContent10_AssetPack_0601_AppleLoopsChineseTraditional.pkg'
-'MAContent10_AssetPack_0601_AppleLoopsChineseTraditional.pkg.resumeDataMA'
 'MAContent10_AssetPack_0602_EXS_WorldChineseKit.pkg'
-'MAContent10_AssetPack_0602_EXS_WorldChineseKit.pkg.resumeDataMA'
 'MAContent10_AssetPack_0603_EXS_WorldErhu.pkg'
-'MAContent10_AssetPack_0603_EXS_WorldErhu.pkg.resumeDataMA'
 'MAContent10_AssetPack_0604_EXS_WorldPipa.pkg'
-'MAContent10_AssetPack_0604_EXS_WorldPipa.pkg.resumeDataMA'
-'MAContent10_AssetPack_0605_EXS_ClassicalGrand.pkg'
-'MAContent10_AssetPack_0605_EXS_ClassicalGrand.pkg.resumeDataMA')
+'MAContent10_AssetPack_0605_EXS_ClassicalGrand.pkg')
 
-echo "** Downloading 2016 content..."
+writelog "Beginning to download Chinese instruments..."
 for ((i = 0; i < "${#content2016garageband1012[@]}"; i++))
 do
-	echo "Downloading ${content2016garageband1012[$i]}..."
+	writelog "Downloading ${content2016garageband1012[$i]}..."
 	curl -o "$downloadFolder"/"${content2016garageband1012[$i]}" http://audiocontentdownload.apple.com/lp10_ms3_content_2016/"${content2016garageband1012[$i]}"
-	#installer -pkg "$downloadFolder"/"${content2016garageband1012[$i]}" -target /
+	writelog "${content2016garageband1012[$i]} Download: Successful." "${content2016garageband1012[$i]} Download: Failed."
+	installer -pkg "$downloadFolder"/"${content2016garageband1012[$i]}" -target /
+	if [ $? = 0 ]; then
+		/bin/echo "$(date) ${content2016garageband1012[$i]} Install: Successful." >> "$log"
+		/bin/rm -rf "$downloadFolder"/"${content2016garageband1012[$i]}"
+		writelog "${content2016garageband1012[$i]} Deletion: Successful." "${content2016garageband1012[$i]} Deletion: Failed."
+	else
+		/bin/echo "$(date) ${content2016garageband1012[$i]} Install: Failed." >> "$log"
+		/bin/echo "$(date) ${content2016garageband1012[$i]} available for examination in ${downloadFolder}." >> "$log"
+	fi
 done
 
 # https://jamfnation.jamfsoftware.com/discussion.html?id=6464#responseChild40895
@@ -450,143 +502,175 @@ legacyContent=('http://downloads.apple.com/static/gb/gb11bc/GarageBandBasicConte
 'http://swcdn.apple.com/content/downloads/43/39/061-5890/y2FxthySsyd2PSt3zfZ4mz3XkbqdGZPDZc/GarageBandExtraContent.tar'
 'http://audiocontentdownload.apple.com/lp9_ms2_content_2011/MGBContentCompatibility.pkg')
 
-echo "** Downloading legacy content..."
+writelog "Beginning to download legacy content..."
 for ((i = 0; i < "${#legacyContent[@]}"; i++))
 do
 	filename=$(echo "${legacyContent[$i]}" | awk -F'/' '{print $NF}')
 	if [[ "$filename" = "GarageBandExtraContent.tar" ]];then
-		echo "Downloading $filename..."
+		writelog "Downloading $filename..."
 		curl -o "$downloadFolder"/"$filename" "${legacyContent[$i]}"
+		writelog "${filename} Download: Successful." "${filename} Download: Failed."
 		# Unarchive to get the .pkg
 		tar -xf "$downloadFolder"/"$filename" -C "$downloadFolder"
+		writelog "${filename} Unarchive: Successful." "${filename} Unarchive: Failed."
 		filenamePkg=$(echo "$filename" | cut -d'.' -f-1)
 		tar -xf "$downloadFolder"/"$filenamePkg".pkg.tar -C "$downloadFolder"
-		# rm -rf "$downloadFolder"/"$filenamePkg".pkg.tar
-		# rm -rf "$downloadFolder"/"$filenamePkg".tar
-		#installer -pkg "$downloadFolder"/"$filenamePkg".pkg -target /
+		writelog "${filenamePkg}.pkg.tar Unarchive: Successful." "${filenamePkg}.pkg.tar Unarchive: Failed."
+		/bin/rm -rf "$downloadFolder"/"$filenamePkg".pkg.tar
+		writelog "${filename}.pkg.tar Deletion: Successful." "${filenamePkg}.pkg.tar Deletion: Failed."
+		/bin/rm -rf "$downloadFolder"/"$filename"
+		writelog "${filename} Deletion: Successful." "${filename} Deletion: Failed."
+		/bin/rm -rf "$downloadFolder"/signature
+		writelog "${downloadFolder}/signature Deletion: Successful." "${downloadFolder}/signature Deletion: Failed."
+		installer -pkg "$downloadFolder"/"$filenamePkg".pkg -target /
+		if [ $? = 0 ]; then
+			/bin/echo "$(date) ${filenamePkg}.pkg Install: Successful." >> "$log"
+			/bin/rm -rf "$downloadFolder"/"${filenamePkg}.pkg"
+			writelog "${filenamePkg}.pkg Deletion: Successful." "${filenamePkg}.pkg Deletion: Failed."
+		else
+			/bin/echo "$(date) ${filenamePkg}.pkg Install: Failed." >> "$log"
+			/bin/echo "$(date) ${filenamePkg}.pkg available for examination in ${downloadFolder}." >> "$log"
+		fi
 	else
-		echo "Downloading $filename..."
+		/bin/echo "Downloading $filename ..." >> "$log"
 		curl -o "$downloadFolder"/"$filename" "${legacyContent[$i]}"
-		#installer -pkg "$downloadFolder"/"${legacyContent[$i]}" -target /
+		writelog "${filename} Download: Successful." "${filename} Download: Failed."
+		installer -pkg "$downloadFolder"/"$filename" -target /
+		if [ $? = 0 ]; then
+			/bin/echo "$(date) ${filename} Install: Successful." >> "$log"
+			/bin/rm -rf "$downloadFolder"/"${filename}"
+			writelog "${filename} Deletion: Successful." "${filename} Deletion: Failed."
+		else
+			/bin/echo "$(date) ${filename} Install: Failed." >> "$log"
+			/bin/echo "$(date) ${filename} available for examination in ${downloadFolder}." >> "$log"
+		fi
 	fi
 done
 
-# https://groups.google.com/d/msg/macenterprise/GMGONqr17CM/wQZs6wLAa0AJ
-lessons=('2Z695-0098_Rock%20Guitar%201_Power%20Chord%20Punk.pkg'
-'2Z695-0099_Rock%20Guitar%202_Suspended%20Chords%20and%20Arpeggios.pkg'
-'2Z695-0100_Rock%20Guitar%203_Drop%20D%20and%20Heavy%20Riffs.pkg'
-'2Z695-0101_Rock%20Guitar%204_Melodies%20and%20Two%20Note%20Chords.pkg'
-'2Z695-0102_Rock%20Guitar%205_Classic%20Riffs.pkg'
-'2Z695-0050_Guitar%20Lesson%202_Chords%20-%20G,%20C.pkg'
-'2Z695-0051_Guitar%20Lesson%203_Chords%20-%20A,%20D.pkg'
-'2Z695-0052_Guitar%20Lesson%204_Minor%20Chords.pkg'
-'2Z695-0053_Guitar%20Lesson%205_Single%20Note%20Melodies.pkg'
-'2Z695-0054_Guitar%20Lesson%206_Power%20Chords.pkg'
-'2Z695-0055_Guitar%20Lesson%207_Major%20Barre%20Chords.pkg'
-'2Z695-0056_Guitar%20Lesson%208_Minor%20Barre%20Chords.pkg'
-'2Z695-0057_Guitar%20Lesson%209_Blues%20Lead.pkg'
-'2Z695-0091_Blues%20Guitar%201_12%20Bar%20Blues%20in%20A.pkg'
-'2Z695-0092_Blues%20Guitar%202_Minor%20Pentatonic%20Scale.pkg'
-'2Z695-0093_Blues%20Guitar%203_Blues%20Rhythm%20Riffs.pkg'
-'2Z695-0094_Blues%20Guitar%204_12%20Bar%20Blues%20in%20Other%20Keys.pkg'
-'2Z695-0095_Blues%20Guitar%205_Bends%20and%20Vibrato.pkg'
-'2Z695-0096_Blues%20Guitar%206_Hammers,%20Pulls,%20and%20Slides.pkg'
-'2Z695-0097_Blues%20Guitar%207_Blues%20Scale%20and%20Quarter%20Bends.pkg'
-'2Z695-0103_Pop%20Piano%201_Major%20and%20Minor%20Chords.pkg'
-'2Z695-0104_Pop%20Piano%202_Inversions%20and%20Broken%20Chords.pkg'
-'2Z695-0105_Pop%20Piano%203_Suspended%20Chords.pkg'
-'2Z695-0106_Pop%20Piano%204_7th%20Chords.pkg'
-'2Z695-0107_Pop%20Piano%205_Slash%20Chords.pkg'
-'2Z695-0108_Pop%20Piano%206_Melodic%20Embellishment.pkg'
-'2Z695-0109_Classical%20Piano%201_Mozart%20Minuet.pkg'
-'2Z695-0110_Classical%20Piano%202_Bach%20Musette.pkg'
-'2Z695-0111_Classical%20Piano%203_Beethoven%20Fuer%20Elise.pkg'
-'2Z695-0112_Classical%20Piano%204_Chopin%20Prelude.pkg'
-'2Z695-0042_Piano%20Lesson%202_Right%20Hand.pkg'
-'2Z695-0043_Piano%20Lesson%203_Left%20Hand.pkg'
-'2Z695-0044_Piano%20Lesson%204_Rhythm.pkg'
-'2Z695-0045_Piano%20Lesson%205_Sharps%20and%20Flats.pkg'
-'2Z695-0046_Piano%20Lesson%206_Rhythmic%20Accents.pkg'
-'2Z695-0047_Piano%20Lesson%207_Major%20and%20Minor%20Chords.pkg'
-'2Z695-0048_Piano%20Lesson%208_Scales.pkg'
-'2Z695-0049_Piano%20Lesson%209_Playing%20the%20Blues.pkg')
+# Commented out Garageband lesson PKGs
 
-echo "** Downloading lessons..."
-for ((i = 0; i < "${#lessons[@]}"; i++))
-do
-	filename=$(echo "${lessons[$i]}" | cut -d'_' -f2- | tr -d '%20')
-	echo "Downloading $filename..."
-	curl -o "$downloadFolder"/"$filename" http://downloads.apple.com/pub/lessons/basic/"${lessons[$i]}"
-	#installer -pkg "$downloadFolder"/"$filename" -target /
-done
+# https://groups.google.com/d/msg/macenterprise/GMGONqr17CM/wQZs6wLAa0AJ
+#lessons=('2Z695-0098_Rock%20Guitar%201_Power%20Chord%20Punk.pkg'
+#'2Z695-0099_Rock%20Guitar%202_Suspended%20Chords%20and%20Arpeggios.pkg'
+#'2Z695-0100_Rock%20Guitar%203_Drop%20D%20and%20Heavy%20Riffs.pkg'
+#'2Z695-0101_Rock%20Guitar%204_Melodies%20and%20Two%20Note%20Chords.pkg'
+#'2Z695-0102_Rock%20Guitar%205_Classic%20Riffs.pkg'
+#'2Z695-0050_Guitar%20Lesson%202_Chords%20-%20G,%20C.pkg'
+#'2Z695-0051_Guitar%20Lesson%203_Chords%20-%20A,%20D.pkg'
+#'2Z695-0052_Guitar%20Lesson%204_Minor%20Chords.pkg'
+#'2Z695-0053_Guitar%20Lesson%205_Single%20Note%20Melodies.pkg'
+#'2Z695-0054_Guitar%20Lesson%206_Power%20Chords.pkg'
+#'2Z695-0055_Guitar%20Lesson%207_Major%20Barre%20Chords.pkg'
+#'2Z695-0056_Guitar%20Lesson%208_Minor%20Barre%20Chords.pkg'
+#'2Z695-0057_Guitar%20Lesson%209_Blues%20Lead.pkg'
+#'2Z695-0091_Blues%20Guitar%201_12%20Bar%20Blues%20in%20A.pkg'
+#'2Z695-0092_Blues%20Guitar%202_Minor%20Pentatonic%20Scale.pkg'
+#'2Z695-0093_Blues%20Guitar%203_Blues%20Rhythm%20Riffs.pkg'
+#'2Z695-0094_Blues%20Guitar%204_12%20Bar%20Blues%20in%20Other%20Keys.pkg'
+#'2Z695-0095_Blues%20Guitar%205_Bends%20and%20Vibrato.pkg'
+#'2Z695-0096_Blues%20Guitar%206_Hammers,%20Pulls,%20and%20Slides.pkg'
+#'2Z695-0097_Blues%20Guitar%207_Blues%20Scale%20and%20Quarter%20Bends.pkg'
+#'2Z695-0103_Pop%20Piano%201_Major%20and%20Minor%20Chords.pkg'
+#'2Z695-0104_Pop%20Piano%202_Inversions%20and%20Broken%20Chords.pkg'
+#'2Z695-0105_Pop%20Piano%203_Suspended%20Chords.pkg'
+#'2Z695-0106_Pop%20Piano%204_7th%20Chords.pkg'
+#'2Z695-0107_Pop%20Piano%205_Slash%20Chords.pkg'
+#'2Z695-0108_Pop%20Piano%206_Melodic%20Embellishment.pkg'
+#'2Z695-0109_Classical%20Piano%201_Mozart%20Minuet.pkg'
+#'2Z695-0110_Classical%20Piano%202_Bach%20Musette.pkg'
+#'2Z695-0111_Classical%20Piano%203_Beethoven%20Fuer%20Elise.pkg'
+#'2Z695-0112_Classical%20Piano%204_Chopin%20Prelude.pkg'
+#'2Z695-0042_Piano%20Lesson%202_Right%20Hand.pkg'
+#'2Z695-0043_Piano%20Lesson%203_Left%20Hand.pkg'
+#'2Z695-0044_Piano%20Lesson%204_Rhythm.pkg'
+#'2Z695-0045_Piano%20Lesson%205_Sharps%20and%20Flats.pkg'
+#'2Z695-0046_Piano%20Lesson%206_Rhythmic%20Accents.pkg'
+#'2Z695-0047_Piano%20Lesson%207_Major%20and%20Minor%20Chords.pkg'
+#'2Z695-0048_Piano%20Lesson%208_Scales.pkg'
+#'2Z695-0049_Piano%20Lesson%209_Playing%20the%20Blues.pkg')
+
+#writelog "Beginning to download lessons..."
+#for ((i = 0; i < "${#lessons[@]}"; i++))
+#do
+#	filename=$(echo "${lessons[$i]}" | cut -d'_' -f2- | tr -d '%20')
+#	echo "Downloading $filename..."
+#	curl -o "$downloadFolder"/"$filename" http://downloads.apple.com/pub/lessons/basic/"${lessons[$i]}"
+#	#installer -pkg "$downloadFolder"/"$filename" -target /
+#done
 
 # http://thestuff.info/garageband-and-logic-pro-x-additional-content/
 # https://brianli.com/download-logic-pro-x-additional-content-files/
 # http://audiocontentdownload.apple.com/lp10_ms3_content_2015/logicpro1010.plist
-logicContent=('MAContent10_AppleLoopsChillwave.pkg'
-'MAContent10_AppleLoopsDeepHouse.pkg'
-'MAContent10_AppleLoopsDubstep.pkg'
-'MAContent10_AppleLoopsElectroHouse.pkg'
-'MAContent10_AppleLoopsHipHop.pkg'
-'MAContent10_AppleLoopsModernRnB.pkg'
-'MAContent10_AppleLoopsTechHouse.pkg'
-'ProAudioCoreContent10.pkg'
-'MAContent10_ElectronicDrumKits.pkg'
-'MAContent10_GarageBandPremiumContent.pkg'
-'GarageBandBasicContent.pkg'
-'MAContent10_GarageBand6Legacy.pkg'
-'MAContent10_IRsStereo.pkg'
-'MAContent10_IRsSurround.pkg'
-'MAContent10_InstrumentsBass.pkg'
-'MAContent10_InstrumentsGuitar.pkg'
-'MAContent10_InstrumentsMallet.pkg'
-'MAContent10_InstrumentsOrchestralBrass.pkg'
-'MAContent10_InstrumentsOrchestralChoir.pkg'
-'MAContent10_InstrumentsOrchestralHarp.pkg'
-'MAContent10_InstrumentsOrchestralKeyboard.pkg'
-'MAContent10_InstrumentsOrchestralPercussion.pkg'
-'MAContent10_InstrumentsOrchestralPipeOrgan.pkg'
-'MAContent10_InstrumentsOrchestralStrings.pkg'
-'MAContent10_InstrumentsOrchestralWoodwinds.pkg'
-'MAContent10_InstrumentsPiano.pkg'
-'MAContent10_InstrumentsWorldKeyboards.pkg'
-'MAContent10_InstrumentsWorldPercussion.pkg'
-'MAContent10_InstrumentsWorldStringed.pkg'
-'MAContent10_InstrumentsWorldVoice.pkg'
-'MAContent10_InstrumentsWorldWoodwind.pkg'
-'MAContent10_AppleLoopsLegacy1.pkg'
-'JamPack1.pkg'
-'MAContent10_AppleLoopsLegacyRemix.pkg'
-'RemixTools_Instruments.pkg'
-'MAContent10_AppleLoopsLegacyRhythm.pkg'
-'RhythmSection_Instruments.pkg'
-'MAContent10_AppleLoopsLegacySymphony.pkg'
-'JamPack4_Instruments.pkg'
-'MAContent10_AppleLoopsLegacyVoices.pkg'
-'Voices_Instruments.pkg'
-'MAContent10_AppleLoopsLegacyWorld.pkg'
-'WorldMusic_Instruments.pkg'
-'MAContent10_Logic9Legacy.pkg'
-'MGBContentCompatibility.pkg'
-'MAContent10_ProducerBirchKit.pkg'
-'MAContent10_ProducerClassicSixtiesKit.pkg'
-'MAContent10_ProducerModernMapleKit.pkg'
-'MAContent10_ProducerPatches.pkg'
-'MAContent10_ProducerPawnShopKit.pkg'
-'MAContent10_ProducerSeventiesPlexiKit.pkg'
-'MAContent10_ProducerStadiumKit.pkg'
-'MAContent10_ProducerStudioKit.pkg'
-'MAContent10_ProducerTightMapleKit.pkg'
-'MAContent10_StereoDrumKitsAlternative.pkg'
-'MAContent10_StereoDrumKitsRnB.pkg'
-'MAContent10_StereoDrumKitsRockB.pkg'
-'MAContent10_StereoDrumKitsRock.pkg'
-'MAContent10_StereoDrumKitsSongwriter.pkg')
+#logicContent=('MAContent10_AppleLoopsChillwave.pkg'
+#'MAContent10_AppleLoopsDeepHouse.pkg'
+#'MAContent10_AppleLoopsDubstep.pkg'
+#'MAContent10_AppleLoopsElectroHouse.pkg'
+#'MAContent10_AppleLoopsHipHop.pkg'
+#'MAContent10_AppleLoopsModernRnB.pkg'
+#'MAContent10_AppleLoopsTechHouse.pkg'
+#'ProAudioCoreContent10.pkg'
+#'MAContent10_ElectronicDrumKits.pkg'
+#'MAContent10_GarageBandPremiumContent.pkg'
+#'GarageBandBasicContent.pkg'
+#'MAContent10_GarageBand6Legacy.pkg'
+#'MAContent10_IRsStereo.pkg'
+#'MAContent10_IRsSurround.pkg'
+#'MAContent10_InstrumentsBass.pkg'
+#'MAContent10_InstrumentsGuitar.pkg'
+#'MAContent10_InstrumentsMallet.pkg'
+#'MAContent10_InstrumentsOrchestralBrass.pkg'
+#'MAContent10_InstrumentsOrchestralChoir.pkg'
+#'MAContent10_InstrumentsOrchestralHarp.pkg'
+#'MAContent10_InstrumentsOrchestralKeyboard.pkg'
+#'MAContent10_InstrumentsOrchestralPercussion.pkg'
+#'MAContent10_InstrumentsOrchestralPipeOrgan.pkg'
+#'MAContent10_InstrumentsOrchestralStrings.pkg'
+#'MAContent10_InstrumentsOrchestralWoodwinds.pkg'
+#'MAContent10_InstrumentsPiano.pkg'
+#'MAContent10_InstrumentsWorldKeyboards.pkg'
+#'MAContent10_InstrumentsWorldPercussion.pkg'
+#'MAContent10_InstrumentsWorldStringed.pkg'
+#'MAContent10_InstrumentsWorldVoice.pkg'
+#'MAContent10_InstrumentsWorldWoodwind.pkg'
+#'MAContent10_AppleLoopsLegacy1.pkg'
+#'JamPack1.pkg'
+#'MAContent10_AppleLoopsLegacyRemix.pkg'
+#'RemixTools_Instruments.pkg'
+#'MAContent10_AppleLoopsLegacyRhythm.pkg'
+#'RhythmSection_Instruments.pkg'
+#'MAContent10_AppleLoopsLegacySymphony.pkg'
+#'JamPack4_Instruments.pkg'
+#'MAContent10_AppleLoopsLegacyVoices.pkg'
+#'Voices_Instruments.pkg'
+#'MAContent10_AppleLoopsLegacyWorld.pkg'
+#'WorldMusic_Instruments.pkg'
+#'MAContent10_Logic9Legacy.pkg'
+#'MGBContentCompatibility.pkg'
+#'MAContent10_ProducerBirchKit.pkg'
+#'MAContent10_ProducerClassicSixtiesKit.pkg'
+#'MAContent10_ProducerModernMapleKit.pkg'
+#'MAContent10_ProducerPatches.pkg'
+#'MAContent10_ProducerPawnShopKit.pkg'
+#'MAContent10_ProducerSeventiesPlexiKit.pkg'
+#'MAContent10_ProducerStadiumKit.pkg'
+#'MAContent10_ProducerStudioKit.pkg'
+#'MAContent10_ProducerTightMapleKit.pkg'
+#'MAContent10_StereoDrumKitsAlternative.pkg'
+#'MAContent10_StereoDrumKitsRnB.pkg'
+#'MAContent10_StereoDrumKitsRockB.pkg'
+#'MAContent10_StereoDrumKitsRock.pkg'
+#'MAContent10_StereoDrumKitsSongwriter.pkg')
 
-echo "** Downloading Logic content..."
-for ((i = 0; i < "${#logicContent[@]}"; i++))
-do
-	echo "Downloading ${logicContent[$i]}..."
-	curl -o "$downloadFolder"/"${logicContent[$i]}" http://audiocontentdownload.apple.com/lp10_ms3_content_2013/"${logicContent[$i]}"
-	#installer -pkg "$downloadFolder"/"${logicContent[$i]}" -target /
-done
+#echo "** Downloading Logic content..."
+#for ((i = 0; i < "${#logicContent[@]}"; i++))
+#do
+#	echo "Downloading ${logicContent[$i]}..."
+#	curl -o "$downloadFolder"/"${logicContent[$i]}" http://audiocontentdownload.apple.com/lp10_ms3_content_2013/"${logicContent[$i]}"
+#	#installer -pkg "$downloadFolder"/"${logicContent[$i]}" -target /
+#done
+
+writelog "Completed download & install of all Garageband Loops."
+
+writelog "----------- Garageband Loops Download & Install Script Finished -----------"
+
+exit
